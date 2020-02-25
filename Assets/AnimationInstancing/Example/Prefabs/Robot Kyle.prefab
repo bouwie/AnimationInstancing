@@ -1376,8 +1376,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6447844570313802807}
   - component: {fileID: 4031103990835505485}
-  - component: {fileID: 2018154382028601670}
-  - component: {fileID: 2018154382028601671}
   m_Layer: 0
   m_Name: Robot Kyle
   m_TagString: Untagged
@@ -1420,40 +1418,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2018154382028601670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8007401930947737124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 693441f6cef7ea441ba0bcd9bbffc66f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshesCreated:
-  - {fileID: 4300000, guid: 9d48dc3115a961d43b7be718d1ef94b9, type: 2}
-  saveDirectory: C:/Users/DLaptop/Desktop/Git/AnimationInstancing/AnimationInstancing/Assets/AnimationInstancing/Example/Animation
-  saveMode: 0
-  animationForSave:
-  - Idle
-  clipLenght: 2.12
---- !u!114 &2018154382028601671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8007401930947737124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af2d236d0e9ef144a879e479a1ef5386, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  combineMeshes: 0
-  saveDirectory: C:/Users/DLaptop/Desktop/Git/AnimationInstancing/AnimationInstancing/Assets/AnimationInstancing/Example/Robot
-    Kyle/Controller
 --- !u!1 &8179489877600002080
 GameObject:
   m_ObjectHideFlags: 0

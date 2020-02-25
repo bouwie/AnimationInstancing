@@ -4,99 +4,105 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
+#endif
 
-public class AICreateMeshFromSkinnedMesh : MonoBehaviour
+namespace AnimationInstancing
 {
-    [SerializeField] private bool combineMeshes;
 
-    [HideInInspector] public string saveDirectory;
+    public class AICreateMeshFromSkinnedMesh : MonoBehaviour
+    {
+        [SerializeField] private bool combineMeshes;
 
-    public Mesh[] Transform() {
-        SkinnedMeshRenderer[] skinnedMeshRenderers = transform.GetComponentsInChildren<SkinnedMeshRenderer>();
-        CombineInstance[] combine = new CombineInstance[skinnedMeshRenderers.Length];
-        List<Material> materials = new List<Material>();
-        Mesh[] meshes = new Mesh[skinnedMeshRenderers.Length];
+        [HideInInspector] public string saveDirectory;
 
-        int x = 0;
+        public Mesh[] Transform() {
+            SkinnedMeshRenderer[] skinnedMeshRenderers = transform.GetComponentsInChildren<SkinnedMeshRenderer>();
+            CombineInstance[] combine = new CombineInstance[skinnedMeshRenderers.Length];
+            List<Material> materials = new List<Material>();
+            Mesh[] meshes = new Mesh[skinnedMeshRenderers.Length];
 
-        for(int i = 0; i < skinnedMeshRenderers.Length; i++) {
-            SkinnedMeshRenderer skinnedMesh = skinnedMeshRenderers[i];
+            int x = 0;
 
-          
-            string absolutePath = saveDirectory + "/" + skinnedMesh.gameObject.name + "Mesh.asset";
-            string relativePath = Application.dataPath;
-
-            if(absolutePath.StartsWith(Application.dataPath)) {
-                relativePath = "Assets" + absolutePath.Substring(Application.dataPath.Length);
-            }
-
-            Mesh mesh = new Mesh();
-
-            skinnedMesh.BakeMesh(mesh);
+            for(int i = 0; i < skinnedMeshRenderers.Length; i++) {
+                SkinnedMeshRenderer skinnedMesh = skinnedMeshRenderers[i];
 
 
-            foreach(Material material in skinnedMesh.sharedMaterials) {
-                if(!materials.Contains(material)) {
-                    materials.Add(material);
+                string absolutePath = saveDirectory + "/" + skinnedMesh.gameObject.name + "Mesh.asset";
+                string relativePath = Application.dataPath;
+
+                if(absolutePath.StartsWith(Application.dataPath)) {
+                    relativePath = "Assets" + absolutePath.Substring(Application.dataPath.Length);
                 }
+
+                Mesh mesh = new Mesh();
+
+                skinnedMesh.BakeMesh(mesh);
+
+
+                foreach(Material material in skinnedMesh.sharedMaterials) {
+                    if(!materials.Contains(material)) {
+                        materials.Add(material);
+                    }
+                }
+
+                if(!combineMeshes) {
+
+                    MeshFilter meshFilter = skinnedMesh.gameObject.AddComponent<MeshFilter>();
+                    meshFilter.mesh = mesh;
+
+                    MeshRenderer meshRenderer = skinnedMesh.gameObject.AddComponent<MeshRenderer>();
+                    meshRenderer.sharedMaterials = skinnedMesh.sharedMaterials;
+
+                }
+
+
+                combine[i].mesh = mesh;
+                combine[i].transform = skinnedMesh.transform.localToWorldMatrix;
+
+                DestroyImmediate(skinnedMesh);
+
+                Vector2[] uvs = new Vector2[mesh.vertexCount];
+                for(int v = 0; v < uvs.Length; v++) {
+                    uvs[v] = new Vector2(x, 0);
+                    x++;
+                }
+
+                mesh.uv2 = uvs;
+
+
+
+                AssetDatabase.CreateAsset(mesh, relativePath);
+                AssetDatabase.SaveAssets();
+
+                meshes[i] = mesh;
+
             }
 
-            if(!combineMeshes) {
+            if(combineMeshes) {
+                MeshRenderer renderer = transform.gameObject.AddComponent<MeshRenderer>();
+                MeshFilter filter = transform.gameObject.AddComponent<MeshFilter>();
 
-                MeshFilter meshFilter = skinnedMesh.gameObject.AddComponent<MeshFilter>();
-                meshFilter.mesh = mesh;
+                Mesh mesh = new Mesh();
+                filter.sharedMesh = mesh;
+                filter.sharedMesh.CombineMeshes(combine, false);
+                renderer.sharedMaterials = materials.ToArray();
 
-                MeshRenderer meshRenderer = skinnedMesh.gameObject.AddComponent<MeshRenderer>();
-                meshRenderer.sharedMaterials = skinnedMesh.sharedMaterials;
-
+                Vector2[] uvs = new Vector2[mesh.vertexCount];
+                x = 0;
+                for(int v = 0; v < uvs.Length; v++) {
+                    uvs[v] = new Vector2(x, 0);
+                    x++;
+                }
+                mesh.uv2 = uvs;
+                filter.sharedMesh = mesh;
             }
-
-
-            combine[i].mesh = mesh;
-            combine[i].transform = skinnedMesh.transform.localToWorldMatrix;
-
-            DestroyImmediate(skinnedMesh);
-
-            Vector2[] uvs = new Vector2[mesh.vertexCount];
-            for(int v = 0; v < uvs.Length; v++) {
-                uvs[v] = new Vector2(x, 0);
-                x++;
-            }
-
-            mesh.uv2 = uvs;
-
-
-
-            AssetDatabase.CreateAsset(mesh, relativePath);
-            AssetDatabase.SaveAssets();
-
-            meshes[i] = mesh;
-
+            return meshes;
         }
-
-        if(combineMeshes) {
-            MeshRenderer renderer = transform.gameObject.AddComponent<MeshRenderer>();
-            MeshFilter filter = transform.gameObject.AddComponent<MeshFilter>();
-
-            Mesh mesh = new Mesh();
-            filter.sharedMesh = mesh;
-            filter.sharedMesh.CombineMeshes(combine, false);
-            renderer.sharedMaterials = materials.ToArray();
-
-            Vector2[] uvs = new Vector2[mesh.vertexCount];
-            x = 0;
-            for(int v = 0; v < uvs.Length; v++) {
-                uvs[v] = new Vector2(x, 0);
-                x++;
-            }
-            mesh.uv2 = uvs;
-            filter.sharedMesh = mesh;
-        }
-        return meshes;
     }
-}
 
-[CustomEditor(typeof(AICreateMeshFromSkinnedMesh))]
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(AICreateMeshFromSkinnedMesh))]
 public class AICreateMeshFromSkinnedMeshEditor : Editor
 {
     private AICreateMeshFromSkinnedMesh meshCreator;
@@ -142,3 +148,5 @@ public class AICreateMeshFromSkinnedMeshEditor : Editor
     }
 }
 #endif
+
+}

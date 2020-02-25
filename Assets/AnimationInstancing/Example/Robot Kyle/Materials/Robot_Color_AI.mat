@@ -119,6 +119,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - BOOLEAN_A8662068: 1
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
@@ -135,6 +136,7 @@ Material:
     - _Blend: 0
     - _BlendAnimationHeight: 0
     - _BlendCurrentTime: 0
+    - _BlendDuration: 0
     - _BlendMode: 0
     - _CoatMask: 0
     - _CullMode: 2
@@ -164,7 +166,7 @@ Material:
     - _DistortionVectorBias: -1
     - _DistortionVectorScale: 2
     - _DoubleSidedEnable: 0
-    - _DoubleSidedNormalMode: 1
+    - _DoubleSidedNormalMode: 2
     - _DstBlend: 0
     - _EmissiveColorMode: 1
     - _EmissiveExposureWeight: 1

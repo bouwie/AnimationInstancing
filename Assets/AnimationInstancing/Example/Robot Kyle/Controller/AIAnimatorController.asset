@@ -14,66 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodes:
   - id: 0
-  - id: 1
-  animNodeCount: 3
-  selectedNode:
-    graph: {fileID: 0}
-    name: 
-    windowRect:
-      serializedVersion: 2
-      x: 0
-      y: 0
-      width: 0
-      height: 0
-    id: 0
-    transitions: []
-  selectedTransition:
-    myController: {fileID: 11400000}
-    startId: 2
-    endId: 0
-    hasExitTime: 0
-    exitTime: 0
-    transitionTime: 0
-    offset: -10
-    conditions: []
+  animNodeCount: 32
   panX: 50000
   panY: 50000
+  zoom: -30
   parameters: []
   references:
     version: 1
     00000000:
-      type: {class: AIAnimatorController/AnimationNode, ns: , asm: Assembly-CSharp}
+      type: {class: AnimationNode, ns: AnimationInstancing, asm: Assembly-CSharp}
       data:
-        graph: {fileID: 0}
         name: Idle
         windowRect:
           serializedVersion: 2
-          x: 50714
-          y: 50325
+          x: 50745
+          y: 50216
           width: 200
           height: 75
-        id: 0
+        id: 30
         transitions: []
         animation: {fileID: 11400000, guid: 2f3151323e68c774a8381129da816739, type: 2}
-    00000001:
-      type: {class: AIAnimatorController/AnimationNode, ns: , asm: Assembly-CSharp}
-      data:
-        graph: {fileID: 0}
-        name: Empty2
-        windowRect:
-          serializedVersion: 2
-          x: 50746
-          y: 50488
-          width: 200
-          height: 75
-        id: 2
-        transitions:
-        - myController: {fileID: 11400000}
-          startId: 2
-          endId: 0
-          hasExitTime: 0
-          exitTime: 0
-          transitionTime: 0
-          offset: -10
-          conditions: []
-        animation: {fileID: 0}
