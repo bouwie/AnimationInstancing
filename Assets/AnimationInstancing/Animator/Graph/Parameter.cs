@@ -39,7 +39,9 @@ namespace AnimationInstancing
         }
 
 
+        //Editor Stuff
 
+        #if UNITY_EDITOR
         public virtual bool Draw() {
             GUILayout.BeginHorizontal();
             GUILayout.Label(name);
@@ -59,6 +61,7 @@ namespace AnimationInstancing
             GUILayout.EndHorizontal();
             return true;
         }
+        #endif
     }
 
 }

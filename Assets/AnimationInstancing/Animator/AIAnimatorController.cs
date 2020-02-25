@@ -98,13 +98,15 @@ namespace AnimationInstancing
         }
 
         //Editor Stuff
+#if UNITY_EDITOR
         public void OnEditorWindowOpen(AIAnimatorControllerWindow _graph) {
             foreach(Node node in nodes) {
                 node.OnEditorWindowOpen(_graph);
             }
         }
+#endif
 
- 
+
     }
 
 }

@@ -42,7 +42,10 @@ namespace AnimationInstancing
         public List<Condition> conditions;
 
         [System.NonSerialized] private float startTime;
+
+#if UNITY_EDITOR
         [System.NonSerialized] public AIAnimatorControllerWindow graph;
+#endif  
 
 
         public Transition(AIAnimatorController _myController, int _start, int _end, float _offset) {
@@ -73,10 +76,6 @@ namespace AnimationInstancing
             }
         }
 
-        public void OnEditorWindowOpen(AIAnimatorControllerWindow _graph) {
-            graph = _graph;
-            myController = _graph.controller;
-        }
 
         public void RemoveParameter(string _name) {
             for(int i = 0; i < conditions.Count; i++) {
@@ -84,6 +83,12 @@ namespace AnimationInstancing
                     conditions.RemoveAt(i);
                 }
             }
+        }
+        //Editor Stuff
+#if UNITY_EDITOR
+        public void OnEditorWindowOpen(AIAnimatorControllerWindow _graph) {
+            graph = _graph;
+            myController = _graph.controller;
         }
 
         public void Draw() {
@@ -115,15 +120,6 @@ namespace AnimationInstancing
 
         }
 
-        public bool ContainsCondition(string _name) {
-            foreach(Condition condition in conditions) {
-                if(condition.name == _name) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
 
         private void CheckForClick(Vector3[] _bezierPoints, float _radius) {
             Vector2 mousePos = Event.current.mousePosition;
@@ -140,7 +136,6 @@ namespace AnimationInstancing
 
         public override void OnSelect() {
             base.OnSelect();
-
 
             TransitionWindow transitionWindow = new TransitionWindow(new Rect(0, 0, 0, 0), graph);
             graph.RemoveAllWindows<TransitionWindow>();
@@ -193,6 +188,7 @@ namespace AnimationInstancing
 
 
         }
+        #endif
 
         //Logic
         public bool MeetsRequirements() {
@@ -202,6 +198,15 @@ namespace AnimationInstancing
                 }
             }
             return true;
+        }
+
+        public bool ContainsCondition(string _name) {
+            foreach(Condition condition in conditions) {
+                if(condition.name == _name) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public override void Enter() {

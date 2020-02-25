@@ -45,6 +45,9 @@ namespace AnimationInstancing
             Equal
         }
 
+        //Editor Stuff
+
+        #if UNITY_EDITOR
         public override bool Draw() {
             GUILayout.BeginHorizontal();
             GUILayout.Label(name);
@@ -65,6 +68,7 @@ namespace AnimationInstancing
             GUILayout.EndHorizontal();
             return true;
         }
+        #endif
 
         public bool IsTrue() {
             switch(type) {

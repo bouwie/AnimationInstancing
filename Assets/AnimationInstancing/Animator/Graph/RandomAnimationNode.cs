@@ -34,7 +34,9 @@ namespace AnimationInstancing
             return animation;
         }
 
-        
+        //Editor Stuff
+
+        #if UNITY_EDITOR
         protected override void DrawWindowContents(int _id) {
 
             int newCount = Mathf.Max(0, EditorGUILayout.DelayedIntField("size", animations.Count));
@@ -51,6 +53,7 @@ namespace AnimationInstancing
 
             base.DrawWindowContents(_id);
         }
+        #endif
 
         //Logic
         public override void Enter() {

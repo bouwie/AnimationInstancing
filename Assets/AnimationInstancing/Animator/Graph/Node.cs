@@ -11,7 +11,9 @@ namespace AnimationInstancing
     [System.Serializable]
     public class Node : State
     {
+#if UNITY_EDITOR
         [System.NonSerialized] public AIAnimatorControllerWindow graph;
+#endif
 
         public string name;
         public Rect windowRect;
@@ -56,12 +58,14 @@ namespace AnimationInstancing
             }
         }
 
+#if UNITY_EDITOR
         public void OnEditorWindowOpen(AIAnimatorControllerWindow _graph) {
             graph = _graph;
             foreach(Transition transition in transitions) {
                 transition.OnEditorWindowOpen(_graph);
             }
         }
+#endif
 
         public bool HasConnectionTo(Node _target) {
             for(int i = 0; i < transitions.Count; i++) {
@@ -82,6 +86,9 @@ namespace AnimationInstancing
             }
         }
 
+        //Editor Stuff
+
+        #if UNITY_EDITOR
         public virtual void Draw() {
    
            windowRect = GUI.Window(id, windowRect, DrawWindowContents, name);
@@ -122,6 +129,12 @@ namespace AnimationInstancing
             graph.StartConnecting(this);
         }
 
+        public override void Delete() {
+            base.Delete();
+            graph.controller.RemoveNode(this);
+        }
+#endif
+
         //Logic
         public override void Enter() {
 
@@ -132,9 +145,5 @@ namespace AnimationInstancing
 
         }
 
-        public override void Delete() {
-            base.Delete();
-            graph.controller.RemoveNode(this);  
-        }
     }
 }

@@ -21,6 +21,9 @@ namespace AnimationInstancing
 
         }
 
+
+        //Editor Stuff
+        #if UNITY_EDITOR
         public override void Draw() {
             //zoomAppliedRect.x += graph.controller.zoom;
             //zoomAppliedRect.y += graph.controller.zoom;
@@ -56,7 +59,25 @@ namespace AnimationInstancing
             base.DrawWindowContents(_id);
         }
 
-    
+        private void StartConnecting() {
+            graph.StartConnecting(this);
+        }
+
+        public override void OnSelect() {
+            base.OnSelect();
+
+            AnimationNodeWindow nodeWindow = new AnimationNodeWindow(new Rect(0, 0, 0, 0), graph);
+            graph.RemoveAllWindows<AnimationNodeWindow>();
+            nodeWindow.SetTarget(this);
+            graph.AddWindow(nodeWindow);
+        }
+
+        public override void OnUnSelect() {
+            graph.RemoveAllWindows<AnimationNodeWindow>();
+        }
+        #endif
+
+
 
         public override object Clone() {
             AnimationNode clone = new AnimationNode(new Vector2(windowRect.x, windowRect.y), id);
@@ -72,23 +93,6 @@ namespace AnimationInstancing
         }
 
 
-        private void StartConnecting() {
-            graph.StartConnecting(this);
-        }
-
-        public override void OnSelect() {
-            base.OnSelect();
-
-   
-           AnimationNodeWindow nodeWindow = new AnimationNodeWindow(new Rect(0, 0, 0, 0), graph);
-            graph.RemoveAllWindows<AnimationNodeWindow>();
-            nodeWindow.SetTarget(this);
-            graph.AddWindow(nodeWindow);
-        }
-
-        public override void OnUnSelect() {
-            graph.RemoveAllWindows<AnimationNodeWindow>();
-        }
 
         //Logic
         public override void Enter() {
