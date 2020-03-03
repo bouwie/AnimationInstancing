@@ -12,6 +12,7 @@ namespace AnimationInstancing
     public class AnimationNode : Node
     {
         public AIAnimation animation;
+        public bool loop;
 
         [System.NonSerialized] private float startTime;
 
@@ -54,8 +55,9 @@ namespace AnimationInstancing
             GUILayout.BeginHorizontal();
             GUILayout.Label("Animation: ", style);
                   animation = (AIAnimation)EditorGUILayout.ObjectField(animation, typeof(AIAnimation), false, GUILayout.ExpandHeight(true), GUILayout.MaxHeight(Mathf.Max(20, graph.controller.zoom)));
+
             GUILayout.EndHorizontal();
-        
+
             base.DrawWindowContents(_id);
         }
 
@@ -166,7 +168,9 @@ namespace AnimationInstancing
         //}
 
         public override void Exit() {
-
+            if(!loop) {
+                runtimeController.Stop();
+            }
         }
 
         public override AIAnimation FetchLastAnimation() {

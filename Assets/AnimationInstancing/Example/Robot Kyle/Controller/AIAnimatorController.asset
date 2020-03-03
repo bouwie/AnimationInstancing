@@ -34,3 +34,4 @@ MonoBehaviour:
         id: 30
         transitions: []
         animation: {fileID: 11400000, guid: 2f3151323e68c774a8381129da816739, type: 2}
+        loop: 1

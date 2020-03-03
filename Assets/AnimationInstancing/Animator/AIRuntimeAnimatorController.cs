@@ -53,6 +53,11 @@ namespace AnimationInstancing
             }
         }
 
+
+        public void Stop() {
+            SetSpeed(0);
+        }
+
         public void SetSpeed(float _speed) {
             speed = _speed;
 

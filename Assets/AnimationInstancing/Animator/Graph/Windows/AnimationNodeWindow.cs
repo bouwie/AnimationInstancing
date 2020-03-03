@@ -40,7 +40,10 @@ namespace AnimationInstancing
             targetNode.name = EditorGUILayout.TextField(targetNode.name);
             GUILayout.EndHorizontal();
 
-
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Loop:");
+            targetNode.loop = GUILayout.Toggle(targetNode.loop, "");
+            GUILayout.EndHorizontal();
             ////did we select a animationNode?
             //AnimationNode animationNode = controller.selectedNode as AnimationNode;
 
