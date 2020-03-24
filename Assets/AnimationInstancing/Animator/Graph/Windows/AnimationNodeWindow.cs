@@ -40,6 +40,8 @@ namespace AnimationInstancing
             targetNode.name = EditorGUILayout.TextField(targetNode.name);
             GUILayout.EndHorizontal();
 
+            targetNode.playbackSpeed = EditorGUILayout.FloatField("Playback speed:", targetNode.playbackSpeed);
+
             GUILayout.BeginHorizontal();
             GUILayout.Label("Loop:");
             targetNode.loop = GUILayout.Toggle(targetNode.loop, "");

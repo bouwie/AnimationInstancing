@@ -17,7 +17,7 @@ namespace AnimationInstancing
         public Node start {
             get {
                 if(runtimeController != null) {
-                    return runtimeController.GetNode(startId);
+                    return runtimeController.GetRuntimeNode(startId);
                 } else {
                     return myController.GetNode(startId);
                 }
@@ -27,7 +27,7 @@ namespace AnimationInstancing
         public Node end {
             get {
                 if(runtimeController != null) {
-                    return runtimeController.GetNode(endId);
+                    return runtimeController.GetRuntimeNode(endId);
                 } else {
                     return myController.GetNode(endId);
                 }
@@ -210,9 +210,9 @@ namespace AnimationInstancing
         }
 
         public override void Enter() {
-            runtimeController.PlayTransition(this, end.FetchLastAnimation());
-            runtimeController.SetCurrentState(this);
             startTime = Time.time;
+            runtimeController.PlayTransition(this, end.FetchLastAnimation(), end.FetchLastPlaybackSpeed());
+            runtimeController.SetCurrentState(this);
         }
 
         //void Update() {

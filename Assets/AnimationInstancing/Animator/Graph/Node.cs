@@ -51,6 +51,10 @@ namespace AnimationInstancing
             return null;
         }
 
+        public virtual float FetchLastPlaybackSpeed() {
+            return 1;
+        }
+
         public override void OnRuntimeInitialize(AIRuntimeAnimatorController _runtimeController) {
             base.OnRuntimeInitialize(_runtimeController);
             foreach(Transition transition in transitions) {
@@ -106,6 +110,7 @@ namespace AnimationInstancing
                         // create the menu and add items to it
                         GenericMenu menu = new GenericMenu();
                         menu.AddItem(new GUIContent("Connect"), false, StartConnecting);
+                        menu.AddItem(new GUIContent("Set as entry node"), graph.controller.entryNodeId == id, SetAsEntryNode);
 
                         // display the menu
                         menu.ShowAsContext();
@@ -129,6 +134,10 @@ namespace AnimationInstancing
             graph.StartConnecting(this);
         }
 
+        private void SetAsEntryNode() {
+            graph.SetEntryNode(id);
+        }
+
         public override void Delete() {
             base.Delete();
             graph.controller.RemoveNode(this);
@@ -137,7 +146,7 @@ namespace AnimationInstancing
 
         //Logic
         public override void Enter() {
-
+       
         }
 
 

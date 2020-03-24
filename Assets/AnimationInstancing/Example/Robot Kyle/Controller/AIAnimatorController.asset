@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodes:
   - id: 0
-  animNodeCount: 32
+  - id: 1
+  entryNodeId: 30
+  animNodeCount: 34
   panX: 50000
   panY: 50000
   zoom: -30
@@ -27,11 +29,43 @@ MonoBehaviour:
         name: Idle
         windowRect:
           serializedVersion: 2
-          x: 50745
-          y: 50216
+          x: 50571
+          y: 50234
           width: 200
           height: 75
         id: 30
-        transitions: []
+        transitions:
+        - myController: {fileID: 11400000}
+          startId: 30
+          endId: 33
+          hasExitTime: 1
+          exitTime: 0.75
+          transitionTime: 2
+          offset: -10
+          conditions: []
         animation: {fileID: 11400000, guid: 2f3151323e68c774a8381129da816739, type: 2}
+        playbackSpeed: 1
+        loop: 1
+    00000001:
+      type: {class: AnimationNode, ns: AnimationInstancing, asm: Assembly-CSharp}
+      data:
+        name: Walk
+        windowRect:
+          serializedVersion: 2
+          x: 50988
+          y: 50224
+          width: 200
+          height: 75
+        id: 33
+        transitions:
+        - myController: {fileID: 11400000}
+          startId: 33
+          endId: 30
+          hasExitTime: 1
+          exitTime: 0.75
+          transitionTime: 2
+          offset: 10
+          conditions: []
+        animation: {fileID: 11400000, guid: afb9b400dda215a49a51c0ec01f84954, type: 2}
+        playbackSpeed: 1
         loop: 1

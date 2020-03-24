@@ -20,6 +20,9 @@ namespace AnimationInstancing
 
         [SerializeReference]
         public List<Node> nodes = new List<Node>();
+
+        public int entryNodeId;
+
         public int animNodeCount = 0;
         public State selected;
         //   public Transition selectedTransition;
@@ -94,6 +97,7 @@ namespace AnimationInstancing
                     return nodes[i];
                 }
             }
+            Debug.LogError("Node Not Found with id" + _id);
             return null;
         }
 

@@ -14,16 +14,16 @@ namespace AnimationInstancing
         private float animationZeroReset;
         private float blendZeroReset;
 
-        public float speed { private set; get; }
-
         [System.NonSerialized]
         public List<Node> runtimeNodes;
 
         public delegate void UpdateStarter(State _state);
         private UpdateStarter updateStarter;
 
-        public void Initalize(AIAnimatorController _copy, MeshRenderer[] _meshRenderers, UpdateStarter _updateStarter, string _name) {
+        public void Initalize(AIAnimatorController _copy, MeshRenderer[] _meshRenderers, UpdateStarter _updateStarter) {
+            entryNodeId = _copy.entryNodeId;
             runtimeNodes = new List<Node>();
+            nodes = _copy.nodes;
 
             foreach(Node node in _copy.nodes) {
                 runtimeNodes.Add((Node)node.Clone());
@@ -32,11 +32,30 @@ namespace AnimationInstancing
             meshRenderers = _meshRenderers;
             updateStarter = _updateStarter;
 
-            name = _name;
             foreach(Node animationNode in runtimeNodes) {
                 animationNode.OnRuntimeInitialize(this);
             }
-            Debug.Log(name);
+        
+        }
+
+        public Node GetRuntimeNode(string _name) {
+            foreach(Node node in runtimeNodes) {
+                if(node.name == _name) {
+                    return node;
+                }
+
+            }
+            return null;
+        }
+
+        public Node GetRuntimeNode(int _id) {
+            for(int i = 0; i < runtimeNodes.Count; i++) {
+                if(runtimeNodes[i].id == _id) {
+                    return runtimeNodes[i];
+                }
+            }
+            Debug.LogError("Node Not Found with id" + _id);
+            return null;
         }
 
         public void SetMeshRenderer(MeshRenderer[] _meshRenderers) {
@@ -53,13 +72,25 @@ namespace AnimationInstancing
             }
         }
 
+        public void Entry() {
+            SetSpeed(1);
+
+            foreach(Node node in runtimeNodes) {
+                if(node.id == entryNodeId) {
+                    //plays the entry animation
+                    node.Enter();
+                    break;
+                }
+            }
+
+        }
+
 
         public void Stop() {
             SetSpeed(0);
         }
 
         public void SetSpeed(float _speed) {
-            speed = _speed;
 
             int i = 0;
 
@@ -68,7 +99,7 @@ namespace AnimationInstancing
                 renderer.GetPropertyBlock(propertyBlock);
 
                 //animation speed
-                propertyBlock.SetFloat("_Speed", _speed);
+                propertyBlock.SetFloat("_AnimationSpeed", _speed);
 
                 renderer.SetPropertyBlock(propertyBlock);
 
@@ -76,8 +107,8 @@ namespace AnimationInstancing
             }
         }
 
-        public float CalculateZeroReset(float _animationLength) {
-            float dividedTime = (Time.time * speed) / _animationLength;
+        public float CalculateZeroReset(float _animationLength, float _animationSpeed) {
+            float dividedTime = (Time.time * _animationSpeed) / _animationLength;
 
             float currentAnimationNormTime = dividedTime - Mathf.FloorToInt(dividedTime);
 
@@ -98,7 +129,7 @@ namespace AnimationInstancing
             updateStarter(_state);
         }
 
-        public void PlayAnimationNode(AIAnimation _animation, bool inheritBlendZeroReset = false) {
+        public void PlayAnimationNode(AIAnimation _animation, float _speed, bool inheritBlendZeroReset = false) {
 
             float zeroReset = 0;
 
@@ -106,10 +137,9 @@ namespace AnimationInstancing
                 zeroReset = blendZeroReset;
             } else {
                 //we need to calculate back what the shader is doing so we can start at time 0
-                zeroReset = CalculateZeroReset(_animation.length);
+                zeroReset = CalculateZeroReset(_animation.length, _speed);
             }
 
-            Debug.Log(name);
             //Debug.Log("Play" + meshRenderers[0].transform.name);
 
             int i = 0;
@@ -123,6 +153,9 @@ namespace AnimationInstancing
 
                 //animation texture
                 propertyBlock.SetTexture("_AnimationTexture", _animation.animationTexture);
+
+                //animation speed
+                propertyBlock.SetFloat("_AnimationSpeed", _speed);
 
                 //max magnitude of this renderer
                 propertyBlock.SetFloat("_MaxMagnitude", _animation.maxMagnitudes[i]);
@@ -144,10 +177,10 @@ namespace AnimationInstancing
         }
 
 
-        public void PlayTransition(Transition _transition, AIAnimation _endAnimation) {
+        public void PlayTransition(Transition _transition, AIAnimation _endAnimation, float _endSpeed) {
             //we need to calculate back what the shader is doing so we can start at time 0
-            blendZeroReset = CalculateZeroReset(_endAnimation.length);
-            float lerpZeroReset = CalculateZeroReset(_transition.transitionTime);
+            blendZeroReset = CalculateZeroReset(_endAnimation.length, _endSpeed);
+            float lerpZeroReset = CalculateZeroReset(_transition.transitionTime, 1);
 
 
             int i = 0;
@@ -166,6 +199,9 @@ namespace AnimationInstancing
 
                 //current animation width
                 propertyBlock.SetFloat("_BlendAnimationWidth", _endAnimation.animationTexture.width);
+
+                //animation speed
+                propertyBlock.SetFloat("_BlendAnimationSpeed", _endSpeed);
 
                 //reset time
                 propertyBlock.SetFloat("_BlendZeroReset", blendZeroReset);

@@ -12,6 +12,7 @@ namespace AnimationInstancing
     public class AnimationNode : Node
     {
         public AIAnimation animation;
+        public float playbackSpeed = 1;
         public bool loop;
 
         [System.NonSerialized] private float startTime;
@@ -84,6 +85,8 @@ namespace AnimationInstancing
         public override object Clone() {
             AnimationNode clone = new AnimationNode(new Vector2(windowRect.x, windowRect.y), id);
             clone.name = name;
+            clone.playbackSpeed = playbackSpeed;
+            clone.loop = loop;
 
             foreach(Transition transition in transitions) {
                 clone.transitions.Add(transition.Clone());
@@ -98,17 +101,24 @@ namespace AnimationInstancing
 
         //Logic
         public override void Enter() {
-            runtimeController.SetCurrentState(this);
-            runtimeController.PlayAnimationNode(animation, true);
             startTime = Time.time;
+
+          //  float endTime = (startTime + (animation.length / playbackSpeed));
+        //    Debug.Log(name + " enter: " + startTime + "   endTime: " + endTime);
+
+            runtimeController.SetCurrentState(this);
+            runtimeController.PlayAnimationNode(animation, playbackSpeed,true);
+
         }
 
         public override IEnumerator Update() {
-            float endTime = (startTime + animation.length);
+            float endTime = (startTime + (animation.length / playbackSpeed));
 
             //are we at the end of the animation?
-            while(Time.time < endTime) {
-                float normTime = Time.time / endTime;
+            bool hasTransitioned = false;
+
+            while(Time.time < endTime && !hasTransitioned) {
+                float normTime = (startTime - Time.time) / endTime;
 
                 //check if we can transition
                 foreach(Transition transition in transitions) {
@@ -116,58 +126,39 @@ namespace AnimationInstancing
                         if(normTime >= transition.exitTime) {
                             if(transition.MeetsRequirements()) {
                                 //Start transition
-                                Exit();
                                 transition.Enter();
+                                hasTransitioned = true;
                                 break;
                             }
                         }
                     } else {
                         if(transition.MeetsRequirements()) {
                             //Start transition
-                            Exit();
                             transition.Enter();
+                            hasTransitioned = true;
                             break;
                         }
                     }
                 }
                 yield return new WaitForEndOfFrame();
             }
-            Exit();
+            //only stop playing if we could not enter a transition
+            if(!hasTransitioned) {
+                Exit();
+            }
         }
 
-        //public override void Update() {
-        //    //are we at the end of the animation?
-        //    float endTime = (startTime + animation.length);
-
-        //    if(Time.time >= endTime) {
-        //        Exit();
-        //    }
-
-        //    float normTime = Time.time / endTime;
-
-        //    //check if we can transition
-        //    foreach(Transition transition in transitions) {
-        //        if(transition.hasExitTime) {
-        //            if(normTime >= transition.exitTime) {
-        //                if(transition.MeetsRequirements()) {
-        //                    //Start transition
-        //                    Exit();
-        //                    transition.Enter();
-        //                    break;
-        //                }
-        //            }
-        //        } else {
-        //            if(transition.MeetsRequirements()) {
-        //                //Start transition
-        //                Exit();
-        //                transition.Enter();
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
-
         public override void Exit() {
+            //check if we can transition one last time
+            foreach(Transition transition in transitions) { 
+                    if(transition.MeetsRequirements()) {
+                        //Start transition
+                        transition.Enter();
+                        return;
+                    }
+                
+            }
+
             if(!loop) {
                 runtimeController.Stop();
             }
@@ -175,6 +166,10 @@ namespace AnimationInstancing
 
         public override AIAnimation FetchLastAnimation() {
             return animation;
+        }
+
+        public override float FetchLastPlaybackSpeed() {
+            return playbackSpeed;
         }
     }
 

@@ -192,6 +192,10 @@ namespace AnimationInstancing
             controller.nodes.Add(newNode);
         }
 
+        public void SetEntryNode(int _entryNodeId) {
+            controller.entryNodeId = _entryNodeId;
+        }
+
         public void StartConnecting(Node _start) {
             connectionStart = _start;
             isConnecting = true;
@@ -217,6 +221,7 @@ namespace AnimationInstancing
                 _start.transitions.Add(newTransition);
             }
         }
+
 
         public void SetSelected(State _target) {
             if(controller.selected != null) {

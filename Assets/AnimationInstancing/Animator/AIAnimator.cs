@@ -18,7 +18,11 @@ namespace AnimationInstancing
             meshRenderers = GetComponentsInChildren<MeshRenderer>();
             runtimeController = (AIRuntimeAnimatorController)ScriptableObject.CreateInstance("AIRuntimeAnimatorController");
             //    runtimeController = new AIRuntimeAnimatorController();
-            runtimeController.Initalize(controller, meshRenderers, StartUpdate, transform.name);
+            runtimeController.Initalize(controller, meshRenderers, StartUpdate);
+        }
+
+        private void Start() {
+            runtimeController.Entry();
         }
 
         public void Play(string _name) {
@@ -27,6 +31,7 @@ namespace AnimationInstancing
 
 
         public void StartUpdate(State _state) {
+            StopAllCoroutines();
             StartCoroutine(_state.Update());
         }
 
