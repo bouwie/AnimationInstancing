@@ -28,7 +28,7 @@ namespace AnimationInstancing
             float width = graph.position.width / scale;
             float heigth = graph.position.height / scale;
 
-            windowRect = new Rect(graph.controller.panX + graph.position.width - width, graph.controller.panY, width, heigth);
+            windowRect = new Rect(graph.controller.panX + graph.position.width - width, graph.controller.panY, width, heigth + 95 + (targetTransition.conditions.Count * 25));
             windowRect = GUI.Window(-2, windowRect, Contents, "Transition");
         }
 

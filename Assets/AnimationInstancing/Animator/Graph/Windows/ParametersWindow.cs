@@ -26,7 +26,7 @@ namespace AnimationInstancing
             float width = graph.position.width / scale;
             float heigth = graph.position.height / scale;
 
-            Rect windowRect = new Rect(graph.controller.panX, graph.controller.panY, width, heigth);
+            Rect windowRect = new Rect(graph.controller.panX, graph.controller.panY, width, heigth + (graph.controller.parameters.Count * 20));
             windowRect = GUI.Window(-3, windowRect, Contents, "Parameters");
         }
 

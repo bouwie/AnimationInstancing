@@ -141,6 +141,8 @@ namespace AnimationInstancing
             graph.RemoveAllWindows<TransitionWindow>();
             transitionWindow.SetTarget(this);
             graph.AddWindow(transitionWindow);
+
+            graph.SetSelected(this);
         }
 
         public override void OnUnSelect() {
@@ -215,13 +217,6 @@ namespace AnimationInstancing
             runtimeController.SetCurrentState(this);
         }
 
-        //void Update() {
-        //    float endTime = (startTime + transitionTime);
-
-        //    if(Time.time >= endTime) {
-        //        Exit();
-        //    }
-        //}
 
         public override IEnumerator Update() {
             yield return new WaitForSeconds(transitionTime);
@@ -234,10 +229,8 @@ namespace AnimationInstancing
         }
 
         public override void Delete() {
-            base.Delete();
-            if(start != null) {
-                start.RemoveTransition(this);
-            }
+            start.RemoveTransition(this);
+            base.Delete();  
         }
     }
 

@@ -73,7 +73,7 @@ namespace AnimationInstancing
 
             Event current = Event.current;
 
-            if(current.keyCode == KeyCode.Delete) {
+            if(current.keyCode == KeyCode.Delete && controller.selected != null) {
                 controller.selected.Delete();
                 Repaint();
             }
