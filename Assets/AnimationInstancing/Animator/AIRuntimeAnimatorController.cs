@@ -29,6 +29,10 @@ namespace AnimationInstancing
                 runtimeNodes.Add((Node)node.Clone());
             }
 
+            foreach(Parameter parameter in _copy.parameters) {
+                parameters.Add(parameter.Clone());
+            }
+
             meshRenderers = _meshRenderers;
             updateStarter = _updateStarter;
 
@@ -119,6 +123,24 @@ namespace AnimationInstancing
             foreach(Parameter parameter in parameters) {
                 if(parameter.name == _name) {
                     parameter.bValue = _value;
+                    break;
+                }
+            }
+        }
+
+        public void SetFloat(string _name, float _value) {
+            foreach(Parameter parameter in parameters) {
+                if(parameter.name == _name) {
+                    parameter.fValue = _value;
+                    break;
+                }
+            }
+        }
+
+        public void SetInt(string _name, int _value) {
+            foreach(Parameter parameter in parameters) {
+                if(parameter.name == _name) {
+                    parameter.iValue = _value;
                     break;
                 }
             }

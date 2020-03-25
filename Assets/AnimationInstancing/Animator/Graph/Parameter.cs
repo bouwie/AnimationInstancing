@@ -19,11 +19,13 @@ namespace AnimationInstancing
         public enum Type
         {
             Boolean,
-            Float
+            Float,
+            Int
         }
 
         public bool bValue;
         public float fValue;
+        public int iValue;
 
         public Parameter(string _name, Type _type) {
             name = _name;
@@ -34,6 +36,7 @@ namespace AnimationInstancing
             Parameter clone = new Parameter(name, type);
             clone.bValue = bValue;
             clone.fValue = fValue;
+            clone.iValue = iValue;
 
             return clone;
         }
@@ -52,6 +55,10 @@ namespace AnimationInstancing
 
                 case Type.Float:
                 fValue = EditorGUILayout.FloatField(fValue);
+                break;
+
+                case Type.Int:
+                iValue = EditorGUILayout.IntField(iValue);
                 break;
             }
 

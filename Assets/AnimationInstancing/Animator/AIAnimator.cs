@@ -43,6 +43,15 @@ namespace AnimationInstancing
             runtimeController.SetBool(_name, _value);
         }
 
+
+        public void SetFloat(string _name, float _value) {
+            runtimeController.SetFloat(_name, _value);
+        }
+
+        public void SetInt(string _name, int _value) {
+            runtimeController.SetInt(_name, _value);
+        }
+
     }
 
 }

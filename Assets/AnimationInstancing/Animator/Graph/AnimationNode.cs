@@ -117,7 +117,7 @@ namespace AnimationInstancing
             //are we at the end of the animation?
             bool hasTransitioned = false;
 
-            while(Time.time < endTime && !hasTransitioned) {
+            while(Time.time < endTime && !hasTransitioned || loop && !hasTransitioned) {
                 float normTime = (startTime - Time.time) / endTime;
 
                 //check if we can transition

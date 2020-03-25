@@ -13,6 +13,7 @@ namespace AnimationInstancing
     {
         public Parameter targetParameter;
         public FConditions fCondition;
+        public IConditions iCondition;
 
         public Condition(string _name, Type _type) : base(_name, _type) {
 
@@ -23,7 +24,11 @@ namespace AnimationInstancing
             clone.targetParameter = targetParameter.Clone();
             clone.fCondition = fCondition;
             clone.fValue = fValue;
+
             clone.bValue = bValue;
+
+            clone.iCondition = iCondition;
+            clone.iValue = iValue;
 
             return clone;
         }
@@ -45,9 +50,16 @@ namespace AnimationInstancing
             Equal
         }
 
+        public enum IConditions
+        {
+            GreaterThan,
+            SmallerThan,
+            Equal
+        }
+
         //Editor Stuff
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         public override bool Draw() {
             GUILayout.BeginHorizontal();
             GUILayout.Label(name);
@@ -59,6 +71,11 @@ namespace AnimationInstancing
                 case Type.Float:
                 fCondition = (FConditions)EditorGUILayout.EnumPopup(fCondition);
                 fValue = EditorGUILayout.FloatField(fValue);
+                break;
+
+                case Type.Int:
+                iCondition = (IConditions)EditorGUILayout.EnumPopup(iCondition);
+                iValue = EditorGUILayout.IntField(iValue);
                 break;
             }
 
@@ -85,6 +102,20 @@ namespace AnimationInstancing
 
                     case FConditions.SmallerThan:
                     return targetParameter.fValue < fValue;
+                }
+                break;
+
+
+                case Type.Int:
+                switch(iCondition) {
+                    case IConditions.Equal:
+                    return targetParameter.iValue == iValue;
+
+                    case IConditions.GreaterThan:
+                    return targetParameter.iValue > iValue;
+
+                    case IConditions.SmallerThan:
+                    return targetParameter.iValue < iValue;
                 }
                 break;
             }

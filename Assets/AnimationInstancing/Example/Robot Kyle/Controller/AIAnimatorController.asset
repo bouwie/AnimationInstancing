@@ -25,6 +25,12 @@ MonoBehaviour:
     type: 1
     bValue: 0
     fValue: 0
+    iValue: 0
+  - name: test
+    type: 2
+    bValue: 0
+    fValue: 0
+    iValue: 1
   references:
     version: 1
     00000000:
@@ -38,7 +44,28 @@ MonoBehaviour:
           width: 200
           height: 75
         id: 30
-        transitions: []
+        transitions:
+        - myController: {fileID: 11400000}
+          startId: 30
+          endId: 34
+          hasExitTime: 0
+          exitTime: 0
+          transitionTime: 0
+          offset: -10
+          conditions:
+          - name: test
+            type: 2
+            bValue: 0
+            fValue: 0
+            iValue: 1
+            targetParameter:
+              name: 
+              type: 0
+              bValue: 0
+              fValue: 0
+              iValue: 0
+            fCondition: 0
+            iCondition: 0
         animation: {fileID: 11400000, guid: 2f3151323e68c774a8381129da816739, type: 2}
         playbackSpeed: 1
         loop: 1
